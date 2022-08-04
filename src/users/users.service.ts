@@ -1,4 +1,4 @@
-import { Injectable } from '@nestjs/common';
+import {HttpException, HttpStatus, Injectable} from '@nestjs/common';
 import {User} from "./users.model";
 import {InjectModel} from "@nestjs/sequelize";
 import {CreateUserDto} from "./dto/create-user.dto";
@@ -6,6 +6,9 @@ import {Role} from "../roles/roles.model";
 import {RolesService} from "../roles/roles.service";
 import {RoleKeys} from "../constants/role-keys";
 import {UpdateUserDto} from "./dto/update-user.dto";
+import {AddRoleDto} from "./dto/add-role.dto";
+import {BanUserDto} from "./dto/ban-user.dto";
+import {ApiErrors} from "../constants/apiErrors";
 
 @Injectable()
 export class UsersService {
@@ -32,6 +35,24 @@ export class UsersService {
         await user.$set("roles", [role.id]);
         user.roles = [role];
         return user
+    }
+
+    async addRole(dto: AddRoleDto): Promise<User | AddRoleDto> {
+        const user = await this.getById(dto.userId);
+        const role = await this.roleService.getByValue(dto.value);
+        if(role && user) {
+            await user.$add('role',role.id)
+            return dto;
+        }
+        throw new HttpException(ApiErrors.USER_OR_ROLE_404, HttpStatus.NOT_FOUND);
+    }
+
+    async ban(dto: BanUserDto): Promise<User> {
+        const user = await this.getById(dto.userId);
+        if(!user) throw new HttpException(ApiErrors.USER_OR_ROLE_404, HttpStatus.NOT_FOUND);
+        user.banned = true;
+        user.banReason = dto.banReason;
+        return await user.save();
     }
 
     async update(id:number,dto: UpdateUserDto) {

@@ -61,11 +61,9 @@ export class AuthService {
 
     async refresh (refreshToken : string): Promise<IAuthUser> {
         if(!refreshToken) this.handlerNoAuthError();
-        const tokenIsValid = await this.jwtService.verifyAsync(refreshToken, {secret: process.env.JWT_REFRESH_SECRET});
-        if(!tokenIsValid)  this.handlerNoAuthError();
-        const userPayload = this.jwtService.decode(refreshToken, {complete: true,json: true})
-        // @ts-ignore
-        const userId: number = userPayload.payload.id;
+        const token = await this.jwtService.verifyAsync(refreshToken, {secret: process.env.JWT_REFRESH_SECRET});
+        if(!token)  this.handlerNoAuthError();
+        const userId: number = token.id
         const user = await this.userService.getById(userId);
         const tokens = await this.generateTokens(user);
         return {user,tokens};

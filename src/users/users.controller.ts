@@ -1,10 +1,16 @@
-import {Body, Controller, Delete, Get, Param, Post, Put, UseGuards} from '@nestjs/common';
+import {Body, Controller, Delete, Get, Param, Post, Put, UseGuards, UsePipes} from '@nestjs/common';
 import {CreateUserDto} from "./dto/create-user.dto";
 import {UsersService} from "./users.service";
 import {ApiOperation, ApiResponse, ApiTags} from "@nestjs/swagger";
 import {User} from "./users.model";
 import {UpdateUserDto} from "./dto/update-user.dto";
-import {JwtAuthGuard} from "../auth/jwt-auth.guard";
+import {JwtAuthGuard} from "../auth/guards/jwt-auth.guard";
+import {Roles} from "../auth/decorators/roles-auth.decorator";
+import {RoleKeys} from "../constants/role-keys";
+import {RolesGuard} from "../auth/guards/roles.guard";
+import {AddRoleDto} from "./dto/add-role.dto";
+import {BanUserDto} from "./dto/ban-user.dto";
+import {ValidationPipe} from "../pipes/validation.pipe";
 
 @ApiTags("Users")
 @Controller('users')
@@ -27,6 +33,24 @@ export class UsersController {
         return this.userService.getById(Number(id));
     }
 
+    @ApiOperation({summary: "Assigning a roles"})
+    @ApiResponse({status: 200, type: User})
+    @Roles(RoleKeys.ADMIN)
+    @UseGuards(JwtAuthGuard,RolesGuard)
+    @Post("/role")
+    addRole(@Body() dto: AddRoleDto) {
+        return this.userService.addRole(dto);
+    }
+
+    @ApiOperation({summary: "Baning a user"})
+    @ApiResponse({status: 200, type: User})
+    @Roles(RoleKeys.ADMIN)
+    @UseGuards(JwtAuthGuard,RolesGuard)
+    @Post("/ban")
+    ban(@Body() dto: BanUserDto) {
+        return this.userService.ban(dto);
+    }
+
     @ApiOperation({summary: "Creating user"})
     @ApiResponse({status: 200, type: User})
     @Post()
@@ -44,7 +68,8 @@ export class UsersController {
 
     @ApiOperation({summary: "Delete user by id"})
     @ApiResponse({status: 200, type: User})
-    @UseGuards(JwtAuthGuard)
+    @Roles(RoleKeys.ADMIN)
+    @UseGuards(JwtAuthGuard,RolesGuard)
     @Delete("/:id")
     remove(@Param('id') id: string) {
         return this.userService.remove(Number(id));
