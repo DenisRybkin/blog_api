@@ -20,7 +20,7 @@ async function bootstrap() {
   SwaggerModule.setup('/api/docs',app,document);
 
   app.use(cookieParser());
-  app.setGlobalPrefix('api');
+  app.setGlobalPrefix(process.env.API_PRFIX);
   app.useGlobalPipes(new ValidationPipe());
 
   await app.listen(PORT, () => console.log(PORT));

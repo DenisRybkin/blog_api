@@ -4,11 +4,11 @@ import {InjectModel} from "@nestjs/sequelize";
 import {CreateUserDto} from "./dto/create-user.dto";
 import {Role} from "../roles/roles.model";
 import {RolesService} from "../roles/roles.service";
-import {RoleKeys} from "../constants/role-keys";
+import {RoleKeys} from "../../constants/role-keys";
 import {UpdateUserDto} from "./dto/update-user.dto";
 import {AddRoleDto} from "./dto/add-role.dto";
 import {BanUserDto} from "./dto/ban-user.dto";
-import {ApiErrors} from "../constants/apiErrors";
+import {ApiErrors} from "../../constants/apiErrors";
 
 @Injectable()
 export class UsersService {

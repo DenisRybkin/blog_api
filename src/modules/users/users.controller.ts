@@ -1,16 +1,15 @@
-import {Body, Controller, Delete, Get, Param, Post, Put, UseGuards, UsePipes} from '@nestjs/common';
+import { Body, Controller, Delete, Get, Param, ParseIntPipe, Post, Put, UseGuards, UsePipes } from '@nestjs/common';
 import {CreateUserDto} from "./dto/create-user.dto";
 import {UsersService} from "./users.service";
 import {ApiOperation, ApiResponse, ApiTags} from "@nestjs/swagger";
 import {User} from "./users.model";
 import {UpdateUserDto} from "./dto/update-user.dto";
-import {JwtAuthGuard} from "../auth/guards/jwt-auth.guard";
-import {Roles} from "../auth/decorators/roles-auth.decorator";
-import {RoleKeys} from "../constants/role-keys";
-import {RolesGuard} from "../auth/guards/roles.guard";
+import {JwtAuthGuard} from "../../guards/jwt-auth.guard";
+import {RoleKeys} from "../../constants/role-keys";
+import {RolesGuard} from "../../guards/roles.guard";
 import {AddRoleDto} from "./dto/add-role.dto";
 import {BanUserDto} from "./dto/ban-user.dto";
-import {ValidationPipe} from "../pipes/validation.pipe";
+import { Roles } from '../../decorators/roles-auth.decorator';
 
 @ApiTags("Users")
 @Controller('users')
@@ -29,8 +28,8 @@ export class UsersController {
     @ApiOperation({summary: "Getting user by id"})
     @ApiResponse({status: 200, type: User})
     @Get("/:id")
-    getById(@Param('id') id: string) {
-        return this.userService.getById(Number(id));
+    getById(@Param('id',ParseIntPipe) id: number) {
+        return this.userService.getById(id);
     }
 
     @ApiOperation({summary: "Assigning a roles"})
@@ -62,8 +61,8 @@ export class UsersController {
     @ApiResponse({status: 200, type: User})
     @UseGuards(JwtAuthGuard)
     @Put("/:id")
-    update(@Param("id") id: string,@Body() userDto: UpdateUserDto) {
-        return this.userService.update(Number(id), userDto);
+    update(@Param("id",ParseIntPipe) id: number,@Body() userDto: UpdateUserDto) {
+        return this.userService.update(id, userDto);
     }
 
     @ApiOperation({summary: "Delete user by id"})
@@ -71,7 +70,7 @@ export class UsersController {
     @Roles(RoleKeys.ADMIN)
     @UseGuards(JwtAuthGuard,RolesGuard)
     @Delete("/:id")
-    remove(@Param('id') id: string) {
-        return this.userService.remove(Number(id));
+    remove(@Param('id',ParseIntPipe) id: number) {
+        return this.userService.remove(id);
     }
 }

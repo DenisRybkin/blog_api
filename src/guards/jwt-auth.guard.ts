@@ -1,7 +1,7 @@
-import {CanActivate, ExecutionContext, Injectable, UnauthorizedException} from "@nestjs/common";
-import {Observable} from "rxjs";
-import {JwtService} from "@nestjs/jwt";
-import {ApiErrors} from "../../constants/apiErrors";
+import { CanActivate, ExecutionContext, Injectable, UnauthorizedException } from "@nestjs/common";
+import { Observable } from 'rxjs';
+import { JwtService } from "@nestjs/jwt";
+import {ApiErrors} from "../constants/apiErrors";
 
 @Injectable()
 export class JwtAuthGuard implements CanActivate {
@@ -9,7 +9,7 @@ export class JwtAuthGuard implements CanActivate {
     constructor(private jwtService: JwtService) {
     }
 
-    canActivate(context: ExecutionContext): boolean | Promise<boolean> | Observable<boolean> {
+    async canActivate(context: ExecutionContext): Promise<boolean> {
         const req = context.switchToHttp().getRequest();
         try {
             const authHeader = req.headers.authorization;
@@ -18,7 +18,7 @@ export class JwtAuthGuard implements CanActivate {
 
             if(bearer !== "Bearer" || !token) throw new UnauthorizedException({message: ApiErrors.USER_IS_NOT_AUTHORIZED});
 
-            const user = this.jwtService.verifyAsync(token, {secret: process.env.JWT_ACCESS_SECRET});
+            const user = await this.jwtService.verifyAsync(token, {secret: process.env.JWT_ACCESS_SECRET});
             if(!user)  throw new UnauthorizedException({message: ApiErrors.USER_IS_NOT_AUTHORIZED});
 
             req.user = user;

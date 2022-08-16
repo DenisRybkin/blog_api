@@ -4,5 +4,6 @@ export enum ApiErrors {
     INCORRECT_EMAIL_OR_PASSWORD = "Incorrect email or password",
     USER_IS_NOT_AUTHORIZED = "User is not authorized",
     FORBIDDEN = "Not enough permissions",
-    USER_OR_ROLE_404 = "The user or the role was not found"
+    USER_OR_ROLE_404 = "The user or the role was not found",
+    WRITE_FILE = "an error occurred while writing the file"
 }

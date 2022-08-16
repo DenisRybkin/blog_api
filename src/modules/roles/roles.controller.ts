@@ -1,13 +1,13 @@
-import {Body, Controller, Delete, Get, Param, Post, UseGuards} from '@nestjs/common';
+import { Body, Controller, Delete, Get, Param, ParseIntPipe, Post, UseGuards } from '@nestjs/common';
 import {RolesService} from "./roles.service";
 import {CreateRoleDto} from "./dto/create-role.dto";
 import {ApiOperation, ApiResponse, ApiTags} from "@nestjs/swagger";
 import {Role} from "./roles.model";
 import {User} from "../users/users.model";
-import {Roles} from "../auth/decorators/roles-auth.decorator";
-import {RoleKeys} from "../constants/role-keys";
-import {JwtAuthGuard} from "../auth/guards/jwt-auth.guard";
-import {RolesGuard} from "../auth/guards/roles.guard";
+import { Roles } from '../../decorators/roles-auth.decorator';
+import { RoleKeys } from '../../constants/role-keys';
+import { JwtAuthGuard } from '../../guards/jwt-auth.guard';
+import { RolesGuard } from '../../guards/roles.guard';
 
 @ApiTags("Authorization")
 @Controller('roles')
@@ -42,8 +42,8 @@ export class RolesController {
     @Roles(RoleKeys.ADMIN)
     @UseGuards(JwtAuthGuard,RolesGuard)
     @Delete("/:id")
-    remove(@Param('id') id: string) {
-        return this.rolesService.remove(Number(id));
+    remove(@Param('id',ParseIntPipe) id: number) {
+        return this.rolesService.remove(id);
     }
 
 }
