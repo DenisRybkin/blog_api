@@ -16,6 +16,7 @@ export class RolesController {
 
     @ApiOperation({summary: "Getting roles"})
     @ApiResponse({status: 200, type: [Role]})
+    @UseGuards(JwtAuthGuard)
     @Get()
     getAll() {
         return this.rolesService.getAll()
@@ -23,6 +24,7 @@ export class RolesController {
 
     @ApiOperation({summary: "Getting role by value"})
     @ApiResponse({status: 200, type: Role})
+    @UseGuards(JwtAuthGuard)
     @Get('/:value')
     getByValue(@Param('value') value: string) {
         return this.rolesService.getByValue(value);

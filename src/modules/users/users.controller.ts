@@ -20,6 +20,7 @@ export class UsersController {
 
     @ApiOperation({summary: "Getting users"})
     @ApiResponse({status: 200, type: [User]})
+    @UseGuards(JwtAuthGuard)
     @Get()
     getAll() {
         return this.userService.getAll();
@@ -27,6 +28,7 @@ export class UsersController {
 
     @ApiOperation({summary: "Getting user by id"})
     @ApiResponse({status: 200, type: User})
+    @UseGuards(JwtAuthGuard)
     @Get("/:id")
     getById(@Param('id',ParseIntPipe) id: number) {
         return this.userService.getById(id);
@@ -52,6 +54,7 @@ export class UsersController {
 
     @ApiOperation({summary: "Creating user"})
     @ApiResponse({status: 200, type: User})
+    @UseGuards(JwtAuthGuard)
     @Post()
     create(@Body() userDto: CreateUserDto) {
         return this.userService.create(userDto);
