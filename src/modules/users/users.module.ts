@@ -7,7 +7,7 @@ import {Role} from "../roles/roles.model";
 import {UserRole} from "../../intermediate-models/user-role.model";
 import {RolesModule} from "../roles/roles.module";
 import { JwtModule, JwtService } from '@nestjs/jwt';
-import { AuthModule } from '../../auth/auth.module';
+import { AuthModule } from '../auth/auth.module';
 import { Post } from '../posts/posts.model';
 
 @Module({

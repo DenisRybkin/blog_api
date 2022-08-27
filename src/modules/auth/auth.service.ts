@@ -1,13 +1,13 @@
 import { HttpException, HttpStatus, Injectable, UnauthorizedException } from '@nestjs/common';
-import { UsersService } from '../modules/users/users.service';
+import { UsersService } from '../users/users.service';
 import { JwtService } from '@nestjs/jwt';
-import { ApiErrors } from '../constants/apiErrors';
-import { User } from '../modules/users/users.model';
+import { ApiErrors } from '../../constants/apiErrors';
+import { User } from '../users/users.model';
 import { IJwtTokens } from './interfaces/jwt-tokens.interface';
-import { JwtLifeExpectancyKeys } from '../constants/jwtKeys';
-import { CreateUserDto } from '../modules/users/dto/create-user.dto';
+import { JwtLifeExpectancyKeys } from '../../constants/jwtKeys';
+import { CreateUserDto } from '../users/dto/create-user.dto';
 import { IAuthUser } from './interfaces/auth-user.interface';
-import { HashSaltKeys } from '../constants/hashKeys';
+import { HashSaltKeys } from '../../constants/hashKeys';
 import * as bcrypt from "bcryptjs";
 
 @Injectable()

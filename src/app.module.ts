@@ -6,7 +6,7 @@ import {User} from "./modules/users/users.model";
 import {RolesModule} from './modules/roles/roles.module';
 import {Role} from "./modules/roles/roles.model";
 import {UserRole} from "./intermediate-models/user-role.model";
-import { AuthModule } from './auth/auth.module';
+import { AuthModule } from './modules/auth/auth.module';
 import {PostsModule} from "./modules/posts/posts.module"
 import { Post } from './modules/posts/posts.model';
 import { FilesModule } from './modules/files/files.module';
